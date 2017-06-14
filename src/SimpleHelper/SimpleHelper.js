@@ -27,15 +27,28 @@ class SimpleHelper {
             runner.on('end', function() {
                 helper.testState.finished = true;
                 console.log('end: %d/%d', helper.testState.passes, helper.testState.passes + helper.testState.failures);
+
+                helper.notifyListener();
             });
         };
     }
 
+    notifyListener() {
+        if(this.promiseResolver) {
+            this.promiseResolver(JSON.stringify(this.testState));
+        }
+    }
+
     test() {
-        return new Promise(function(resolve, reject) {
-            setTimeout(function() {
-                resolve("Nice!");
-            }, 5000);
+        return new Promise((resolve, reject) => {
+            // if the tests have already finished, just send them over immediately...
+            if(this.testState.finished) {
+                resolve(JSON.stringify(this.testState));
+            }
+
+            // ...otherwise, let's keep track of that "resolve" function so we
+            // can call it when the tests DO finish
+            this.promiseResolver = resolve;
         });
     }
 
