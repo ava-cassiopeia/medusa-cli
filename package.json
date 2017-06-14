@@ -1,0 +1,16 @@
+{
+  "name": "simple-tester",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ivan Mattie",
+  "license": "ISC",
+  "dependencies": {
+    "chrome-remote-interface": "^0.23.2",
+    "lighthouse": "^2.1.0",
+    "mime-types": "^2.1.15"
+  }
+}
