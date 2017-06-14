@@ -6,6 +6,11 @@ class SimpleHelper {
             failures: 0,
             finished: false
         };
+
+        // fix for Node modules in the browser
+        if(!window.module) {
+            window.module = {};
+        }
     }
 
     reporter() {
