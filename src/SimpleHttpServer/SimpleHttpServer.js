@@ -1,13 +1,13 @@
 const http = require("http");
-const fs = require("fs");
-const mime = require('mime-types')
+const File = require("./File.js");
 
 class SimpleHttpServer {
 
-    constructor() {
+    constructor(config = {}) {
         this.hostname = '127.0.0.1';
         this.port = 3000;
         this.baseDirectory = __dirname;
+        this.verbose = typeof config.verbose !== 'undefined' ? config.verbose : false;
 
         this.server = null;
     }
@@ -16,8 +16,6 @@ class SimpleHttpServer {
         if(dirname) {
             this.baseDirectory = dirname;
         }
-
-        console.log(this.baseDirectory);
 
         this.server = http.createServer((req, res) => {
             this.requestRecieved(req, res);
@@ -29,46 +27,35 @@ class SimpleHttpServer {
     }
 
     requestRecieved(req, res) {
-        //res.statusCode = 200;
-        //res.setHeader('Content-Type', 'text/plain');
-        //res.end('Hello World\n');
+        this.log(`Requested: ${req.url}`);
 
-        console.log(`url: ${req.url}`);
+        const file = this.loadFile(req.url);
 
-        const fileContents = this.loadFile(req.url);
-
-        if(!fileContents) {
+        if(!file.exists()) {
             res.statusCode = 400;
             res.end('');
+
+            this.log(`\tStatus: 400`);
             return;
         }
 
         res.statusCode = 200;
-        res.setHeader('Content-Type', fileContents.mime);
-        res.end(fileContents.contents);
+        res.setHeader('Content-Type', file.mime);
+        res.end(file.contents);
+
+        this.log(`\tStatus: 200`);
     }
 
     loadFile(path) {
-        const finalPath = this.baseDirectory + path;
+        const file = new File(path, this.baseDirectory);
 
-        if(!fs.existsSync(finalPath)) {
-            return false;
-        }
-
-        const extension = this.getExtensionFromPath(finalPath);
-        const mimeType = mime.lookup(extension);
-        const fileContents = fs.readFileSync(finalPath).toString();
-
-        return {
-            contents: fileContents,
-            mime: mimeType
-        };
+        return file;
     }
 
-    getExtensionFromPath(path) {
-        const splitPath = path.split(".");
-
-        return splitPath[splitPath.length - 1];
+    log(message) {
+        if(this.verbose) {
+            console.log(message);
+        }
     }
 
 }
