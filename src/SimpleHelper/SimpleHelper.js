@@ -1,0 +1,42 @@
+class SimpleHelper {
+
+    constructor() {
+        this.testState = {
+            passes: 0,
+            failures: 0,
+            finished: false
+        };
+    }
+
+    reporter() {
+        var self = this;
+
+        return function(runner) {
+            var helper = self;
+
+            runner.on('pass', function(test) {
+                helper.testState.passes += 1;
+                console.log('pass: %s', test.fullTitle());
+            });
+
+            runner.on('fail', function(test, err) {
+                helper.testState.failures += 1;
+                console.log('fail: %s -- error: %s', test.fullTitle(), err.message);
+            });
+
+            runner.on('end', function() {
+                helper.testState.finished = true;
+                console.log('end: %d/%d', helper.testState.passes, helper.testState.passes + helper.testState.failures);
+            });
+        };
+    }
+
+    test() {
+        return new Promise(function(resolve, reject) {
+            setTimeout(function() {
+                resolve("Nice!");
+            }, 5000);
+        });
+    }
+
+}

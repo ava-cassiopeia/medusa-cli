@@ -9,8 +9,10 @@
   "author": "Ivan Mattie",
   "license": "ISC",
   "dependencies": {
+    "browser-assert": "^1.2.1",
     "chrome-remote-interface": "^0.23.2",
     "lighthouse": "^2.1.0",
-    "mime-types": "^2.1.15"
+    "mime-types": "^2.1.15",
+    "mocha": "^3.4.2"
   }
 }

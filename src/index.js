@@ -23,9 +23,30 @@ async function launchChrome(headless = true) {
     });
 }
 
-/*launchChrome().then(async chrome => {
-    const version = await CDP.Version({port: chrome.port});
-    console.log(version['User-Agent']);
+(async function() {
 
-    chrome.kill();
-});*/
+    const chrome = await launchChrome();
+    const protocol = await CDP({port: chrome.port});
+
+    // Extract the DevTools protocol domains we need and enable them.
+    // See API docs: https://chromedevtools.github.io/devtools-protocol/
+    const {Page, Runtime} = protocol;
+    await Promise.all([Page.enable(), Runtime.enable()]);
+
+    console.log("Here we go...");
+
+    Page.navigate({url: 'http://127.0.0.1:3000/html/index.html'});
+
+    // Wait for window.onload before doing stuff.
+    Page.loadEventFired(async () => {
+        const js = "window.simpleHelper.test()";
+        // Evaluate the JS expression in the page.
+        const result = await Runtime.evaluate({expression: js, awaitPromise: true});
+
+        console.log("Result:");
+        console.log(result.result.value);
+
+        protocol.close();
+        chrome.kill(); // Kill Chrome.
+    });
+})();

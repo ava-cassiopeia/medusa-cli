@@ -3,8 +3,29 @@
 <html lang="en">
     <head>
         <title>Test HTML</title>
+
+        <script type="text/javascript" src="/node_modules/mocha/mocha.js"></script>
+        <script type="text/javascript" src="/src/test/app.js"></script>
+        <script type="text/javascript" src="/src/SimpleHelper/SimpleHelper.js"></script>
+        <link rel="stylesheet" type="text/css" href="/node_modules/mocha/mocha.css" />
     </head>
     <body>
         Hello, world! This is test HTML!
+        <div id="mocha"></div>
+
+        <script type="text/javascript">
+            var simpleHelper = new SimpleHelper();
+
+            mocha.setup({
+                ui: "bdd",
+                reporter: simpleHelper.reporter()
+            });
+        </script>
+        <script type="text/javascript" src="/node_modules/browser-assert/lib/assert.js"></script>
+        <script type="text/javascript" src="/src/test/test.js"></script>
+        <script type="text/javascript">
+            mocha.checkLeaks();
+            mocha.run();
+        </script>
     </body>
 </html>
