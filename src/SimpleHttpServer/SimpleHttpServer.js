@@ -22,8 +22,12 @@ class SimpleHttpServer {
         });
 
         this.server.listen(this.port, this.hostname, () => {
-            console.log(`Server running at http://${this.hostname}:${this.port}/`);
+            // do something on server boot here
         });
+    }
+
+    stop(callback) {
+        this.server.close(callback);
     }
 
     requestRecieved(req, res) {

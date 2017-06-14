@@ -4,7 +4,8 @@ class SimpleHelper {
         this.testState = {
             passes: 0,
             failures: 0,
-            finished: false
+            finished: false,
+            tests: []
         };
 
         // fix for Node modules in the browser
@@ -21,11 +22,29 @@ class SimpleHelper {
 
             runner.on('pass', function(test) {
                 helper.testState.passes += 1;
+                helper.testState.tests.push({
+                    success: true,
+                    title: test.title,
+                    state: test.state,
+                    duration: test.duration,
+                    type: test.type
+                });
                 console.log('pass: %s', test.fullTitle());
             });
 
             runner.on('fail', function(test, err) {
                 helper.testState.failures += 1;
+                helper.testState.tests.push({
+                    success: false,
+                    title: test.title,
+                    state: test.state,
+                    duration: test.duration,
+                    type: test.type,
+                    parent: {
+                        name: test.parent.title,
+                        root: test.parent.root
+                    }
+                });
                 console.log('fail: %s -- error: %s', test.fullTitle(), err.message);
             });
 

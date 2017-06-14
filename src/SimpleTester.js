@@ -1,0 +1,98 @@
+const CDP = require("chrome-remote-interface");
+const chromeLauncher = require('lighthouse/chrome-launcher/chrome-launcher');
+const SimpleHttpServer = require("./SimpleHttpServer/SimpleHttpServer.js");
+
+class SimpleTester {
+
+    constructor(config) {
+        this.webserverBase = config.webserverBase || __dirname;
+        this.testFiles = config.testFiles || []; // must be relative to the webserverBase
+        this.webserverOnly = config.webserverOnly;
+        this.activeServer = null;
+    }
+
+    async run() {
+        let server = new SimpleHttpServer();
+        server.start(__dirname + "/..");
+
+        console.log(`Test server running at http://${server.hostname}:${server.port}/`);
+
+        this.activeServer = server;
+
+        if(!this.webserverOnly) {
+            await this.runTests();
+
+            console.log("Stopping test server...");
+            this.activeServer.stop(function() {
+                console.log("...test server stopped!");
+            });
+        }
+    }
+
+    /**
+     * Launches a debugging instance of Chrome.
+     * @param {boolean=} headless True (default) launches Chrome in headless mode.
+     *     False launches a full version of Chrome.
+     * @return {Promise<ChromeLauncher>}
+     */
+    async launchChrome(headless = true) {
+        return await chromeLauncher.launch({
+        // port: 9222, // Uncomment to force a specific port of your choice.
+            chromeFlags: [
+                '--window-size=412,732',
+                '--disable-gpu',
+                headless ? '--headless' : ''
+            ]
+        });
+    }
+
+    async runTests() {
+        var x, testFile;
+
+        for(x = 0; x < this.testFiles.length; x++) {
+            testFile = this.testFiles[x];
+
+            await this.runTest(testFile);
+        }
+    }
+
+    runTest(testFilePath) {
+        return new Promise(async (resolve, reject) => {
+            const chrome = await this.launchChrome();
+            const protocol = await CDP({port: chrome.port});
+
+            // Extract the DevTools protocol domains we need and enable them.
+            // See API docs: https://chromedevtools.github.io/devtools-protocol/
+            const {Page, Runtime} = protocol;
+            await Promise.all([Page.enable(), Runtime.enable()]);
+
+            console.log(`\tRunning tests for ${testFilePath}`);
+            const targetUrl = `http://${this.activeServer.hostname}:${this.activeServer.port}${this.testFiles[0]}`;
+
+            Page.navigate({url: targetUrl});
+
+            // Wait for window.onload before doing stuff.
+            Page.loadEventFired(async () => {
+                const js = "window.simpleHelper.test()";
+                // Evaluate the JS expression in the page.
+                const results = await Runtime.evaluate({expression: js, awaitPromise: true});
+                const resultJSON = results.result.value;
+                const result = JSON.parse(resultJSON);
+
+                this.printTestResults(result);
+
+                protocol.close();
+                chrome.kill(); // Kill Chrome.
+
+                resolve();
+            });
+        });
+    }
+
+    printTestResults(results) {
+        console.log(results.tests);
+    }
+
+}
+
+module.exports = SimpleTester;
