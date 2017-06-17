@@ -5,7 +5,15 @@ try {
 
     let tester = new SimpleTester(configData);
 
-    tester.run();
+    (async function() {
+        let results = await tester.run();
+
+        if(results.failures > 0) {
+            process.exit(-1);
+        } else {
+            process.exit(0);
+        }
+    })();
 } catch(e) {
     console.log("Couldn't find config file!");
     console.log(e);

@@ -1,6 +1,7 @@
 const CDP = require("chrome-remote-interface");
 const chromeLauncher = require('lighthouse/chrome-launcher/chrome-launcher');
 const SimpleHttpServer = require("./SimpleHttpServer/SimpleHttpServer.js");
+const chalk = require("chalk");
 
 class SimpleTester {
 
@@ -20,12 +21,14 @@ class SimpleTester {
         this.activeServer = server;
 
         if(!this.webserverOnly) {
-            await this.runTests();
+            let results = await this.runTests();
 
             console.log("Stopping test server...");
             this.activeServer.stop(function() {
                 console.log("...test server stopped!");
             });
+
+            return results;
         }
     }
 
@@ -47,13 +50,21 @@ class SimpleTester {
     }
 
     async runTests() {
-        var x, testFile;
+        let x, testFile, summary = {
+            successes: 0,
+            failures: 0
+        };
 
         for(x = 0; x < this.testFiles.length; x++) {
             testFile = this.testFiles[x];
 
-            await this.runTest(testFile);
+            let results = await this.runTest(testFile);
+
+            summary.successes += results.passes;
+            summary.failures += results.failures;
         }
+
+        return summary;
     }
 
     runTest(testFilePath) {
@@ -84,13 +95,21 @@ class SimpleTester {
                 protocol.close();
                 chrome.kill(); // Kill Chrome.
 
-                resolve();
+                resolve(result);
             });
         });
     }
 
     printTestResults(results) {
-        console.log(results.tests);
+        let x, test;
+
+        for(x = 0; x < results.tests.length; x++) {
+            test = results.tests[x];
+
+            let output = "";
+
+            console.log(chalk.red(`\t\t${test.parent.name}: ${test.title} - ${test.success ? 'Success' : 'Failed'}`));
+        }
     }
 
 }
