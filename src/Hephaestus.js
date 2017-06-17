@@ -3,7 +3,7 @@ const chromeLauncher = require('lighthouse/chrome-launcher/chrome-launcher');
 const SimpleHttpServer = require("./SimpleHttpServer/SimpleHttpServer.js");
 const chalk = require("chalk");
 
-class SimpleTester {
+class Hephaestus {
 
     constructor(config) {
         this.webserverBase = config.webserverBase || __dirname;
@@ -114,4 +114,4 @@ class SimpleTester {
 
 }
 
-module.exports = SimpleTester;
+module.exports = Hephaestus;

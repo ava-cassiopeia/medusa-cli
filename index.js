@@ -1,9 +1,9 @@
-const SimpleTester = require("./src/SimpleTester.js");
+const Hephaestus = require("./src/Hephaestus.js");
 
 try {
-    const configData = require(process.cwd() + "/simple-tester-config.js");
+    const configData = require(process.cwd() + "/hephaestus-config.js");
 
-    let tester = new SimpleTester(configData);
+    let tester = new Hephaestus(configData);
 
     (async function() {
         let results = await tester.run();
