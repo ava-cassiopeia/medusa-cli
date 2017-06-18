@@ -9,6 +9,7 @@ tools, webservers, etc., needed.
   - [Installation](#installation)
   - [Setup Project Config](#setup-project-config)
   - [Creating a Test Harness](#creating-a-test-harness)
+  - [Running Tests](#running-tests)
   - [hephaestus-config.js](#hephaestus-configjs)
 
 ## Who is Hephaestus For?
@@ -132,7 +133,24 @@ little bit of help from the Hephaestus reporter.
 
 At this point, you're ready to run tests in your `/tests/test.js` file. Just
 add in what HTML and/or JS you need in the page to run your tests, and you
-should be ready to go!
+should be ready to start running tests!
+
+## Running Tests
+
+Assuming you've installed Hephaestus *and* you've setup your test harnesses and
+Hephaestus config properly, you're ready to start running tests.
+
+Tests can simply be run with the following command:
+
+```CLI
+hephaestus
+```
+
+And you will see a visual representation of your tests, including pass/fails.
+
+*Note:* For those of you using CI servers, the `hephaestus` CLI tool *does*
+return a non-zero exit code when you don't have 100% passing tests, so it is
+useable on tools like Travis.CI
 
 ## hephaestus-config.js
 
