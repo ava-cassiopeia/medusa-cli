@@ -27,7 +27,11 @@ class SimpleHelper {
                     title: test.title,
                     state: test.state,
                     duration: test.duration,
-                    type: test.type
+                    type: test.type,
+                    parent: {
+                        name: test.parent.title,
+                        root: test.parent.root
+                    }
                 });
                 console.log('pass: %s', test.fullTitle());
             });

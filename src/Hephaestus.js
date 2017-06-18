@@ -106,9 +106,15 @@ class Hephaestus {
         for(x = 0; x < results.tests.length; x++) {
             test = results.tests[x];
 
-            let output = "";
+            let output = `\t\t${test.parent.name}: ${test.title} - ${test.success ? 'Success' : 'Failed'}`;
 
-            console.log(chalk.red(`\t\t${test.parent.name}: ${test.title} - ${test.success ? 'Success' : 'Failed'}`));
+            if(test.success) {
+                output = chalk.green(output);
+            } else {
+                output = chalk.red(output);
+            }
+
+            console.log(output);
         }
     }
 
