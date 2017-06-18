@@ -1,4 +1,7 @@
+#! /usr/bin/env node
+
 const Hephaestus = require("./src/Hephaestus.js");
+const chalk = require("chalk");
 
 try {
     const configData = require(process.cwd() + "/hephaestus-config.js");
@@ -15,8 +18,7 @@ try {
         }
     })();
 } catch(e) {
-    console.log("Couldn't find config file!");
-    console.log(e);
+    console.log(chalk.red("Couldn't find hephaestus-config.js file!"));
 
     process.exit(-1);
 }

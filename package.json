@@ -1,7 +1,7 @@
 {
   "name": "hephaestus",
-  "version": "0.1.1",
-  "description": "",
+  "version": "0.2.0",
+  "description": "A simple library for running tests in a Chrome headless environment. No other tools, webservers, etc., needed.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,5 +15,17 @@
     "lighthouse": "^2.1.0",
     "mime-types": "^2.1.15",
     "mocha": "^3.4.2"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aeolingamenfel/hephaestus.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aeolingamenfel/hephaestus/issues"
+  },
+  "homepage": "https://github.com/aeolingamenfel/hephaestus#readme",
+  "bin": {
+    "hephaestus": "index.js"
   }
 }
