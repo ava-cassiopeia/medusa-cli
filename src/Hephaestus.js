@@ -14,7 +14,7 @@ class Hephaestus {
 
     async run() {
         let server = new SimpleHttpServer();
-        server.start(__dirname + "/..");
+        server.start(this.webserverBase);
 
         console.log(`Test server running at http://${server.hostname}:${server.port}/`);
 
