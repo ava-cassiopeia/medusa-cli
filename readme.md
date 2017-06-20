@@ -30,6 +30,13 @@ Installing Hephaestus is as simple as installing it globally with NPM:
 npm i -g hephaestus
 ```
 
+And then, per project, installing Hephaestus in your project as a dev
+dependency:
+
+```CLI
+npm i --save-dev hephaestus
+```
+
 Once Hephaestus is installed, you need to provide a simple config file in your
 project, and then you can start running tests. See
 [Setup Project Config](#setup-project-config) for more information.
