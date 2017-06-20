@@ -120,7 +120,7 @@ little bit of help from the Hephaestus reporter.
 
         <!-- Hephaestus Setup + Mocha Start -->
         <script type="text/javascript">
-            const simpleHelper = new SimpleHelper();
+            var simpleHelper = new SimpleHelper();
 
             mocha.setup({
                 ui: "bdd",

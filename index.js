@@ -11,6 +11,10 @@ try {
     (async function() {
         let results = await tester.run();
 
+        if(!results) {
+            return;
+        }
+
         if(results.failures > 0) {
             process.exit(-1);
         } else {

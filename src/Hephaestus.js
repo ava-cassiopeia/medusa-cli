@@ -21,7 +21,13 @@ class Hephaestus {
         this.activeServer = server;
 
         if(!this.webserverOnly) {
-            let results = await this.runTests();
+            let results = null;
+
+            try {
+                results = await this.runTests();
+            } catch(e) {
+                console.log(e);
+            }
 
             console.log("Stopping test server...");
             this.activeServer.stop(function() {
@@ -87,6 +93,11 @@ class Hephaestus {
                 const js = "window.simpleHelper.test()";
                 // Evaluate the JS expression in the page.
                 const results = await Runtime.evaluate({expression: js, awaitPromise: true});
+
+                if(results && results.result && results.result.subtype && results.result.subtype === 'error') {
+                    reject(results.result);
+                }
+
                 const resultJSON = results.result.value;
                 const result = JSON.parse(resultJSON);
 
