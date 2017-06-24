@@ -1,12 +1,12 @@
 #! /usr/bin/env node
 
-const Hephaestus = require("./src/Hephaestus.js");
+const Medusa = require("./src/Medusa.js");
 const chalk = require("chalk");
 
 try {
-    const configData = require(process.cwd() + "/hephaestus-config.js");
+    const configData = require(process.cwd() + "/medusa-config.js");
 
-    let tester = new Hephaestus(configData);
+    let tester = new Medusa(configData);
 
     (async function() {
         let results = await tester.run();
@@ -22,7 +22,7 @@ try {
         }
     })();
 } catch(e) {
-    console.log(chalk.red("Couldn't find hephaestus-config.js file!"));
+    console.log(chalk.red("Couldn't find medusa-config.js file!"));
 
     process.exit(-1);
 }
