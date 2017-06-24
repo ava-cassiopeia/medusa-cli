@@ -1,6 +1,6 @@
 {
   "name": "medusa-cli",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A simple library for running tests in a Chrome headless environment. No other tools, webservers, etc., needed.",
   "main": "index.js",
   "scripts": {
@@ -26,6 +26,6 @@
   },
   "homepage": "https://github.com/aeolingamenfel/medusa-cli#readme",
   "bin": {
-    "hephaestus": "index.js"
+    "medusa": "index.js"
   }
 }
