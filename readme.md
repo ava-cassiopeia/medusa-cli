@@ -11,6 +11,9 @@ tools, webservers, etc., needed.
   - [Creating a Test Harness](#creating-a-test-harness)
   - [Running Tests](#running-tests)
   - [medusa-config.js](#medusa-configjs)
+  - [Modes and Options](#modes-and-options)
+    - [Webserver Only Mode](#webserver-only-mode)
+    - [Verbose Mode](#verbose-mode)
 
 ## Who is Medusa CLI For?
 
@@ -170,3 +173,27 @@ be exported using Node's `module.exports`.
 | Webserver Base | `webserverBase` | String | Yes | Path to the folder that will be used as the webserver root when testing. |
 | Test Files | `testFiles` | Array<String> | Yes | A list of URLs (from the webserver base) that lead to test harness HTML files |
 | Webserver Only | `webserverOnly` | Boolean | No | Defaults to false. If true, will just run the webserver without running tests. Useful for testing/debugging test harnesses |
+
+## Modes and Options
+
+The `medusa` CLI command has a few optional arguments/modes that can be
+activated if needed, see below for more details.
+
+### Webserver Only Mode
+
+```CLI
+medusa --webserver
+```
+
+If you just want to run the webserver portion of the Medusa CLI (for example,
+for testing your Mocha tests), you can use the webserver flag to disable the
+testing portion of medusa. Of course, press `[ctrl]-[c]` to stop the webserver
+once you are finished.
+
+### Verbose Mode
+
+```CLI
+medusa --verbose
+```
+
+Causes Medusa to print out more information about errors and what it's up to.
