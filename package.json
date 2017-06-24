@@ -19,12 +19,12 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aeolingamenfel/hephaestus.git"
+    "url": "git+https://github.com/aeolingamenfel/medusa-cli.git"
   },
   "bugs": {
-    "url": "https://github.com/aeolingamenfel/hephaestus/issues"
+    "url": "https://github.com/aeolingamenfel/medusa-cli/issues"
   },
-  "homepage": "https://github.com/aeolingamenfel/hephaestus#readme",
+  "homepage": "https://github.com/aeolingamenfel/medusa-cli#readme",
   "bin": {
     "hephaestus": "index.js"
   }
