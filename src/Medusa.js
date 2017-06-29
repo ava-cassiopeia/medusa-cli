@@ -83,7 +83,7 @@ class Medusa {
             const {Page, Runtime} = protocol;
             await Promise.all([Page.enable(), Runtime.enable()]);
 
-            console.log(`\tRunning tests for ${testFilePath}`);
+            console.log(`${Medusa.TAB_STRING}Running tests for ${testFilePath}`);
             const targetUrl = `http://${this.activeServer.hostname}:${this.activeServer.port}${this.testFiles[0]}`;
 
             Page.navigate({url: targetUrl});
@@ -112,21 +112,59 @@ class Medusa {
     }
 
     printTestResults(results) {
-        let x, test;
+        for(let x = 0; x < results.suites.length; x++) {
+            const suite = results.suites[x];
 
-        for(x = 0; x < results.tests.length; x++) {
-            test = results.tests[x];
-
-            let output = `\t\t${test.parent.name}: ${test.title} - ${test.success ? 'Success' : 'Failed'}`;
-
-            if(test.success) {
-                output = chalk.green(output);
-            } else {
-                output = chalk.red(output);
-            }
-
-            console.log(output);
+            this.printSuite(suite, 1);
         }
+    }
+
+    printSuite(suite, tabLevel = 0) {
+        console.log("");
+        console.log(chalk.bold(Medusa.TAB_STRING.repeat(tabLevel) + suite.title));
+
+        // print tests
+        for(let t = 0; t < suite.tests.length; t++) {
+            const test = suite.tests[t];
+
+            this.printTest(test, tabLevel + 1);
+        }
+
+        // print sub-suites
+        for(let s = 0; s < suite.suites.length; s++) {
+            const subSuite = suite.suites[s];
+
+            this.printSuite(subSuite, tabLevel + 1);
+        }
+    }
+
+    printTest(test, tabLevel = 1) {
+        const successful = test.state === 'passed';
+        let output = Medusa.TAB_STRING.repeat(tabLevel);
+
+        output += successful ? Medusa.SUCCESS_SYMBOL : Medusa.FAILURE_SYMBOL;
+
+        output += ` ${test.title}`;
+
+        if(successful) {
+            output = chalk.green(output);
+        } else {
+            output = chalk.red(output);
+        }
+
+        console.log(output);
+    }
+
+    static get SUCCESS_SYMBOL() {
+        return "✔";
+    }
+
+    static get FAILURE_SYMBOL() {
+        return "✗";
+    }
+
+    static get TAB_STRING() {
+        return "    ";
     }
 
 }

@@ -5,7 +5,8 @@ class SimpleHelper {
             passes: 0,
             failures: 0,
             finished: false,
-            tests: []
+            tests: [],
+            suites: null
         };
 
         // fix for Node modules in the browser
@@ -31,8 +32,10 @@ class SimpleHelper {
                     parent: {
                         name: test.parent.title,
                         root: test.parent.root
-                    }
+                    },
+                    error: null
                 });
+
                 console.log('pass: %s', test.fullTitle());
             });
 
@@ -47,12 +50,18 @@ class SimpleHelper {
                     parent: {
                         name: test.parent.title,
                         root: test.parent.root
-                    }
+                    },
+                    error: err
                 });
+
+                console.log(test);
+
                 console.log('fail: %s -- error: %s', test.fullTitle(), err.message);
             });
 
             runner.on('end', function() {
+                helper.testState.suites = mocha.suite.suites;
+
                 helper.testState.finished = true;
                 console.log('end: %d/%d', helper.testState.passes, helper.testState.passes + helper.testState.failures);
 
@@ -71,7 +80,14 @@ class SimpleHelper {
         return new Promise((resolve, reject) => {
             // if the tests have already finished, just send them over immediately...
             if(this.testState.finished) {
-                resolve(JSON.stringify(this.testState));
+                resolve(JSON.stringify(this.testState, function(key, value) {
+                    // prevents circular references
+                    if(key !== 'parent' && key !== 'ctx') {
+                        return value;
+                    } else {
+                        return null;
+                    }
+                }));
             }
 
             // ...otherwise, let's keep track of that "resolve" function so we
