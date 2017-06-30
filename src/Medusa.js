@@ -140,11 +140,17 @@ class Medusa {
 
     printTest(test, tabLevel = 1) {
         const successful = test.state === 'passed';
+        const error = test.actualError;
+
         let output = Medusa.TAB_STRING.repeat(tabLevel);
 
         output += successful ? Medusa.SUCCESS_SYMBOL : Medusa.FAILURE_SYMBOL;
 
         output += ` ${test.title}`;
+
+        if(!successful) {
+            output += this.renderError(error, tabLevel + 1);
+        }
 
         if(successful) {
             output = chalk.green(output);
@@ -153,6 +159,12 @@ class Medusa {
         }
 
         console.log(output);
+    }
+
+    renderError(error, tabLevel = 2) {
+        const tabs = Medusa.TAB_STRING.repeat(tabLevel);
+
+        return chalk.italic(`\n${tabs}${error.name}: ${error.message}`);
     }
 
     static get SUCCESS_SYMBOL() {

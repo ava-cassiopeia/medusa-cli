@@ -15,6 +15,33 @@ class SimpleHelper {
         }
     }
 
+    serializeTest(test, wasSuccess, error) {
+        if(wasSuccess) {
+            this.testState.passes += 1;
+        } else {
+            this.testState.failures += 1;
+        }
+
+        this.testState.tests.push({
+            success: true,
+            title: test.title,
+            state: test.state,
+            duration: test.duration,
+            type: test.type,
+            parent: {
+                name: test.parent.title,
+                root: test.parent.root
+            },
+            error: error
+        });
+
+        if(wasSuccess) {
+            console.log('pass: %s', test.fullTitle());
+        } else {
+            console.log('fail: %s -- error: %s', test.fullTitle(), error.message);
+        }
+    }
+
     reporter() {
         var self = this;
 
@@ -22,41 +49,16 @@ class SimpleHelper {
             var helper = self;
 
             runner.on('pass', function(test) {
-                helper.testState.passes += 1;
-                helper.testState.tests.push({
-                    success: true,
-                    title: test.title,
-                    state: test.state,
-                    duration: test.duration,
-                    type: test.type,
-                    parent: {
-                        name: test.parent.title,
-                        root: test.parent.root
-                    },
-                    error: null
-                });
-
-                console.log('pass: %s', test.fullTitle());
+                helper.serializeTest(test, true, null);
             });
 
             runner.on('fail', function(test, err) {
-                helper.testState.failures += 1;
-                helper.testState.tests.push({
-                    success: false,
-                    title: test.title,
-                    state: test.state,
-                    duration: test.duration,
-                    type: test.type,
-                    parent: {
-                        name: test.parent.title,
-                        root: test.parent.root
-                    },
-                    error: err
-                });
+                helper.serializeTest(test, false, err);
 
-                console.log(test);
-
-                console.log('fail: %s -- error: %s', test.fullTitle(), err.message);
+                test.actualError = {
+                    name: err.name,
+                    message: err.message
+                };
             });
 
             runner.on('end', function() {
