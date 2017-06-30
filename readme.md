@@ -11,6 +11,7 @@ tools, webservers, etc., needed.
   - [Creating a Test Harness](#creating-a-test-harness)
   - [Running Tests](#running-tests)
   - [medusa-config.js](#medusa-configjs)
+    - [Output Styles](#output-styles)
   - [Modes and Options](#modes-and-options)
     - [Webserver Only Mode](#webserver-only-mode)
     - [Verbose Mode](#verbose-mode)
@@ -173,6 +174,39 @@ be exported using Node's `module.exports`.
 | Webserver Base | `webserverBase` | String | Yes | Path to the folder that will be used as the webserver root when testing. |
 | Test Files | `testFiles` | Array<String> | Yes | A list of URLs (from the webserver base) that lead to test harness HTML files |
 | Webserver Only | `webserverOnly` | Boolean | No | Defaults to false. If true, will just run the webserver without running tests. Useful for testing/debugging test harnesses |
+| Symbols | `symbols` | Object | No | See [Output Styles](#output-styles) for more information |
+
+### Output Styles
+
+![Medusa Default Output Styles](https://user-images.githubusercontent.com/6314286/27716226-19a1b202-5cfa-11e7-8474-72b016dc95cf.png)<br />
+*Pictured: Medusa default output styles*
+
+In addition to the above configuration, the output style of Medusa's CLI
+interface can also be somewhat modified to fit your needs. All of these
+configuration options are optional, and available in the config under the
+`symbols` property.
+
+**Example:**
+
+```Javascript
+module.exports = {
+    webserverBase: __dirname,
+    testFiles: [
+        "/html/index.html"
+    ],
+    symbols: {
+        success: "👍",
+        failure: "👎",
+        tab: "  " // use 2-space tabs instead of the default 4-space tabs
+    }
+};
+```
+
+| Name | Key | Default Value | Description |
+| ---- | --- | ------------- | ----------- |
+| Success Icon | `success` | `✔` | The icon that appears next to successful tests |
+| Failure Icon | `failure` | `✗` | The icon that appears next to failed tests |
+| Tab String | `tab` | `    ` | The string used to represent one 'tab', used for indenting output. Defaults to 4 space characters |
 
 ## Modes and Options
 
