@@ -206,7 +206,7 @@ module.exports = {
 | ---- | --- | ------------- | ----------- |
 | Success Icon | `success` | `✔` | The icon that appears next to successful tests |
 | Failure Icon | `failure` | `✗` | The icon that appears next to failed tests |
-| Tab String | `tab` | `    ` | The string used to represent one 'tab', used for indenting output. Defaults to 4 space characters |
+| Tab String | `tab` | `[four spaces]` | The string used to represent one 'tab', used for indenting output. Defaults to 4 space characters |
 
 ## Modes and Options
 
