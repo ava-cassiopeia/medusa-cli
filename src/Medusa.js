@@ -8,6 +8,7 @@ class Medusa {
     constructor(config) {
         this.webserverBase = config.webserverBase || __dirname;
         this.testFiles = config.testFiles || []; // must be relative to the webserverBase
+        this.symbols = config.symbols || {};
         this.webserverOnly = config.webserverOnly;
         this.activeServer = null;
     }
@@ -83,7 +84,7 @@ class Medusa {
             const {Page, Runtime} = protocol;
             await Promise.all([Page.enable(), Runtime.enable()]);
 
-            console.log(`${Medusa.TAB_STRING}Running tests for ${testFilePath}`);
+            console.log(`${this.TAB_STRING}Running tests for ${testFilePath}`);
             const targetUrl = `http://${this.activeServer.hostname}:${this.activeServer.port}${this.testFiles[0]}`;
 
             Page.navigate({url: targetUrl});
@@ -121,7 +122,7 @@ class Medusa {
 
     printSuite(suite, tabLevel = 0) {
         console.log("");
-        console.log(chalk.bold(Medusa.TAB_STRING.repeat(tabLevel) + suite.title));
+        console.log(chalk.bold(this.TAB_STRING.repeat(tabLevel) + suite.title));
 
         // print tests
         for(let t = 0; t < suite.tests.length; t++) {
@@ -142,9 +143,9 @@ class Medusa {
         const successful = test.state === 'passed';
         const error = test.actualError;
 
-        let output = Medusa.TAB_STRING.repeat(tabLevel);
+        let output = this.TAB_STRING.repeat(tabLevel);
 
-        output += successful ? Medusa.SUCCESS_SYMBOL : Medusa.FAILURE_SYMBOL;
+        output += successful ? this.SUCCESS_SYMBOL : this.FAILURE_SYMBOL;
 
         output += ` ${test.title}`;
 
@@ -162,21 +163,21 @@ class Medusa {
     }
 
     renderError(error, tabLevel = 2) {
-        const tabs = Medusa.TAB_STRING.repeat(tabLevel);
+        const tabs = this.TAB_STRING.repeat(tabLevel);
 
         return chalk.italic(`\n${tabs}${error.name}: ${error.message}`);
     }
 
-    static get SUCCESS_SYMBOL() {
-        return "✔";
+    get SUCCESS_SYMBOL() {
+        return this.symbols.success || "✔";
     }
 
-    static get FAILURE_SYMBOL() {
-        return "✗";
+    get FAILURE_SYMBOL() {
+        return this.symbols.failure || "✗";
     }
 
-    static get TAB_STRING() {
-        return "    ";
+    get TAB_STRING() {
+        return this.symbols.tab || "    ";
     }
 
 }
