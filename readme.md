@@ -231,3 +231,11 @@ medusa --verbose
 ```
 
 Causes Medusa to print out more information about errors and what it's up to.
+
+### Get Version
+
+```CLI
+medusa --version
+```
+
+Prints out the current version of the Medusa CLI.
