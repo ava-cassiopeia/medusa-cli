@@ -47,8 +47,8 @@ class File {
         if(this.contentCache) {
             return this.contentCache;
         }
-
-        const fileContents = fs.readFileSync(this.fullPath).toString();
+        
+        const fileContents = fs.readFileSync(this.fullPath);
 
         this.contentCache = fileContents;
 

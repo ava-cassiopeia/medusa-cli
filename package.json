@@ -1,6 +1,6 @@
 {
   "name": "medusa-cli",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "A simple library for running tests in a Chrome headless environment. No other tools, webservers, etc., needed.",
   "main": "index.js",
   "scripts": {
