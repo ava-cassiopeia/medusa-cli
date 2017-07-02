@@ -6,7 +6,7 @@ class SimpleHelper {
             failures: 0,
             finished: false,
             tests: [],
-            suites: null
+            suites: []
         };
 
         // fix for Node modules in the browser

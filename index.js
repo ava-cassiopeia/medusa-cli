@@ -47,6 +47,10 @@ if(args.hasFlag("webserver")) {
     configData.webserverOnly = true;
 }
 
+if(args.hasFlag("verbose")) {
+    configData.verbose = true;
+}
+
 let tester = new Medusa(configData);
 
 (async function() {

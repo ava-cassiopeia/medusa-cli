@@ -3,6 +3,11 @@ const chromeLauncher = require('lighthouse/chrome-launcher/chrome-launcher');
 const SimpleHttpServer = require("./SimpleHttpServer/SimpleHttpServer.js");
 const chalk = require("chalk");
 
+const LOG_LEVEL = {
+    STANDARD: 0,
+    VERBOSE: 1
+};
+
 class Medusa {
 
     constructor(config) {
@@ -10,7 +15,10 @@ class Medusa {
         this.testFiles = config.testFiles || []; // must be relative to the webserverBase
         this.symbols = config.symbols || {};
         this.webserverOnly = config.webserverOnly;
+        this.verbose = !!config.verbose;
         this.activeServer = null;
+
+        this.log("Verbose Mode: On", LOG_LEVEL.VERBOSE);
     }
 
     async run() {
@@ -113,10 +121,14 @@ class Medusa {
     }
 
     printTestResults(results) {
-        for(let x = 0; x < results.suites.length; x++) {
-            const suite = results.suites[x];
+        this.log(results, LOG_LEVEL.VERBOSE);
 
-            this.printSuite(suite, 1);
+        if(results.suites) {
+            for(let x = 0; x < results.suites.length; x++) {
+                const suite = results.suites[x];
+
+                this.printSuite(suite, 1);
+            }
         }
     }
 
@@ -124,18 +136,24 @@ class Medusa {
         console.log("");
         console.log(chalk.bold(this.TAB_STRING.repeat(tabLevel) + suite.title));
 
-        // print tests
-        for(let t = 0; t < suite.tests.length; t++) {
-            const test = suite.tests[t];
+        this.log(suite, LOG_LEVEL.VERBOSE);
 
-            this.printTest(test, tabLevel + 1);
+        // print tests
+        if(suite.tests) {
+            for(let t = 0; t < suite.tests.length; t++) {
+                const test = suite.tests[t];
+
+                this.printTest(test, tabLevel + 1);
+            }
         }
 
         // print sub-suites
-        for(let s = 0; s < suite.suites.length; s++) {
-            const subSuite = suite.suites[s];
+        if(suite.suites) {
+            for(let s = 0; s < suite.suites.length; s++) {
+                const subSuite = suite.suites[s];
 
-            this.printSuite(subSuite, tabLevel + 1);
+                this.printSuite(subSuite, tabLevel + 1);
+            }
         }
     }
 
@@ -166,6 +184,21 @@ class Medusa {
         const tabs = this.TAB_STRING.repeat(tabLevel);
 
         return chalk.italic(`\n${tabs}${error.name}: ${error.message}`);
+    }
+
+    log(message, level = LOG_LEVEL.STANDARD) {
+        switch(level) {
+            case LOG_LEVEL.STANDARD:
+                console.log(message);
+                break;
+            case LOG_LEVEL.VERBOSE:
+                if(this.verbose) {
+                    console.log(message);
+                }
+                break;
+            default:
+                console.warn(`Unknown log level "${level}"!`);
+        }
     }
 
     get SUCCESS_SYMBOL() {
