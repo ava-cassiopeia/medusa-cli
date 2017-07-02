@@ -10,6 +10,7 @@ tools, webservers, etc., needed.
   - [Setup Project Config](#setup-project-config)
   - [Creating a Test Harness](#creating-a-test-harness)
   - [Running Tests](#running-tests)
+  - [CI Servers](#ci-servers)
   - [medusa-config.js](#medusa-configjs)
     - [Output Styles](#output-styles)
   - [Modes and Options](#modes-and-options)
@@ -159,9 +160,31 @@ medusa
 
 And you will see a visual representation of your tests, including pass/fails.
 
-*Note:* For those of you using CI servers, the `medusa` CLI tool *does*
-return a non-zero exit code when you don't have 100% passing tests, so it is
-useable on tools like Travis.CI
+## CI Servers
+
+Medusa is built to work well with your existing CI server. It proper returns a
+non-zero exit code when it quits and there are failing tests. See below for
+specific setup guides for certain services.
+
+### Travis CI
+
+To get Medusa working on Travis CI, you'll need to start with the basic Node
+config, then add the following configuration options:
+
+```YML
+dist: trusty # needs Ubuntu Trusty for Chrome compatibility reasons
+addons:
+  chrome: stable # needs Chrome for headless simulation
+before_script:
+  - npm i -g medusa-cli # need to install Medusa globally
+```
+
+In addition to globally installing Medusa, you'll need to use Ubunty Trusty
+Tahr, as that works properly with the Lighthouse Chrome Launcher used by Medusa,
+and of course, Chrome itself also needs to be installed.
+
+As a quick reminder, remember that, by default, Travis CI runs `npm test`, so
+make sure to have Medusa executing in that NPM command.
 
 ## medusa-config.js
 
