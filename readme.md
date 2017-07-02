@@ -11,6 +11,7 @@ tools, webservers, etc., needed.
   - [Creating a Test Harness](#creating-a-test-harness)
   - [Running Tests](#running-tests)
   - [CI Servers](#ci-servers)
+   - [Travis CI](#travis-ci)
   - [medusa-config.js](#medusa-configjs)
     - [Output Styles](#output-styles)
   - [Modes and Options](#modes-and-options)
