@@ -1,5 +1,7 @@
 # Medusa CLI
 
+[![npm version](https://badge.fury.io/js/medusa-cli.svg)](https://badge.fury.io/js/medusa-cli)
+
 A simple library for running tests in a Chrome headless environment. No other
 tools, webservers, etc., needed.
 
