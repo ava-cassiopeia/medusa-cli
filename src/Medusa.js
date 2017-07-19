@@ -60,7 +60,8 @@ class Medusa {
                 '--window-size=412,732',
                 '--disable-gpu',
                 headless ? '--headless' : ''
-            ]
+            ],
+            logLevel: this.verbose ? 'info' : 'silent'
         });
     }
 
@@ -130,6 +131,9 @@ class Medusa {
                 this.printSuite(suite, 1);
             }
         }
+
+        // add an extra newline to the end of the output for style
+        console.log("");
     }
 
     printSuite(suite, tabLevel = 0) {
